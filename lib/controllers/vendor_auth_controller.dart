@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:vendor_store_app/global_variables.dart';
@@ -42,6 +44,52 @@ class VendorAuthController {
               background: Colors.green,
             );
           });
-    } catch (e) {}
+    } catch (e) {
+      showSnackBar(
+        context,
+        'مشکلی در ثبت نام پیش آمد',
+        background: Colors.red.shade500,
+      );
+      debugPrint('Error Vendor Sign Up: $e');
+    }
+  }
+
+  // Function to consume the backend vendor signin api
+  Future<void> signInVendor({
+    required String email,
+    required String password,
+    required context,
+  }) async {
+    try {
+      http.Response response = await http.post(
+        Uri.parse('$uri/api/vendor/signin'),
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+        headers: <String, String>{
+          // Set the headers for the request
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+      );
+      manageHttpResponse(
+        response: response,
+        context: context,
+        onSuccess: () {
+          showSnackBar(
+            context,
+            'شما با موفقیت وارد شدید',
+            background: Colors.green,
+          );
+        },
+      );
+    } catch (e) {
+      showSnackBar(
+        context,
+        'مشکلی در ورود شما به وجود آمد',
+        background: Colors.red.shade500,
+      );
+      debugPrint('Error Vendor Sign In: $e');
+    }
   }
 }
