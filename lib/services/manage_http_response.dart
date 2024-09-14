@@ -15,7 +15,11 @@ void manageHttpResponse({
       onSuccess();
       break;
     case 400: // status code 400 indicates bad request
-      showSnackBar(context, json.decode(response.body)['msg']);
+      showSnackBar(
+        context,
+        json.decode(response.body)['msg'],
+        background: Colors.yellow.shade900,
+      );
       break;
     case 500: // status code 500 indicates a server error
       showSnackBar(context, json.decode(response.body)['error']);
@@ -26,10 +30,13 @@ void manageHttpResponse({
   }
 }
 
-void showSnackBar(BuildContext context, String title,{Color? background}) {
+void showSnackBar(BuildContext context, String title, {Color? background}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(title),
+      content: Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       backgroundColor: background,
     ),
   );
