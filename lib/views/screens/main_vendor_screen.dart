@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vendor_store_app/views/screens/nav_screens/earnings_screen.dart';
+import 'package:vendor_store_app/views/screens/nav_screens/edit_screen.dart';
+import 'package:vendor_store_app/views/screens/nav_screens/orders_screen.dart';
+import 'package:vendor_store_app/views/screens/nav_screens/upload_screen.dart';
+import 'package:vendor_store_app/views/screens/nav_screens/vendor_profile_screen.dart';
 
 class MainVendorScreen extends StatefulWidget {
   const MainVendorScreen({super.key});
@@ -12,6 +17,13 @@ class _MainVendorScreenState extends State<MainVendorScreen> {
   final Color selectedItemColor = const Color(0xff5796E4);
   final Color unselectedItemColor = const Color(0xff0E0E0E);
   int _pageIndex = 0;
+  final List<Widget> _pages = const [
+    EarningsScreen(),
+    UploadScreen(),
+    EditScreen(),
+    OrdersScreen(),
+    VendorProfileScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -29,20 +41,45 @@ class _MainVendorScreenState extends State<MainVendorScreen> {
           unselectedItemColor: unselectedItemColor,
           backgroundColor: const Color(0xffEFF6FF),
           type: BottomNavigationBarType.fixed,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-                icon: Icon(Iconsax.dollar_square_copy), label: "درآمد"),
+              icon: Icon(
+                _pageIndex == 0
+                    ? Iconsax.dollar_square
+                    : Iconsax.dollar_square_copy,
+              ),
+              label: "درآمد",
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Iconsax.import_1_copy), label: "بارگزاری"),
+              icon: Icon(
+                _pageIndex == 1 ? Iconsax.cloud : Iconsax.cloud_copy,
+              ),
+              label: "بارگزاری",
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Iconsax.edit_copy), label: "ویرایش"),
+              icon: Icon(
+                _pageIndex == 2 ? Iconsax.edit : Iconsax.edit_copy,
+              ),
+              label: "ویرایش",
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Iconsax.shopping_cart_copy), label: "سفارشات"),
+              icon: Icon(
+                _pageIndex == 3
+                    ? Iconsax.shopping_cart
+                    : Iconsax.shopping_cart_copy,
+              ),
+              label: "سفارشات",
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Iconsax.logout_copy), label: "خروج"),
+              icon: Icon(
+                _pageIndex == 4 ? Iconsax.user : Iconsax.user_copy,
+              ),
+              label: "پروفایل",
+            ),
           ],
         ),
       ),
+      body: _pages[_pageIndex],
     );
   }
 }
