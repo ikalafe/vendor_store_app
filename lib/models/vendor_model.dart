@@ -46,7 +46,7 @@ class VendorModel {
    Converting back to the vendor user object
    so that we can make use of it within our application 
   */
-  factory VendorModel.fromJson(Map<String, dynamic> map) {
+  factory VendorModel.fromMap(Map<String, dynamic> map) {
     return VendorModel(
       id: map['_id'] as String,
       fullName: map['fullName'] as String,
@@ -58,4 +58,7 @@ class VendorModel {
       password: map['password'] as String,
     );
   }
+
+  factory VendorModel.fromJson(String source) =>
+      VendorModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

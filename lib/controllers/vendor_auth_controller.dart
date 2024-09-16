@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:vendor_store_app/global_variables.dart';
 import 'package:vendor_store_app/models/vendor_model.dart';
 import 'package:vendor_store_app/services/manage_http_response.dart';
+import 'package:vendor_store_app/views/screens/main_vendor_screen.dart';
 
 class VendorAuthController {
   Future<void> signUpVendor({
@@ -76,6 +77,12 @@ class VendorAuthController {
         response: response,
         context: context,
         onSuccess: () {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainVendorScreen(),
+              ),
+              (route) => false);
           showSnackBar(
             context,
             'شما با موفقیت وارد شدید',
