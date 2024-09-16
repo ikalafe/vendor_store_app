@@ -48,14 +48,14 @@ class VendorModel {
   */
   factory VendorModel.fromMap(Map<String, dynamic> map) {
     return VendorModel(
-      id: map['_id'] as String,
-      fullName: map['fullName'] as String,
-      email: map['email'] as String,
-      state: map['state'] as String,
-      city: map['city'] as String,
-      locality: map['locality'] as String,
-      role: map['role'] as String,
-      password: map['password'] as String,
+      id: map['_id'] as String? ?? '',
+      fullName: map['fullName'] as String? ?? '',
+      email: map['email'] as String? ?? '',
+      state: map['state'] as String? ?? '',
+      city: map['city'] as String? ?? '',
+      locality: map['locality'] as String? ?? '',
+      role: map['role'] as String? ?? '',
+      password: map['password'] as String? ?? '',
     );
   }
 
