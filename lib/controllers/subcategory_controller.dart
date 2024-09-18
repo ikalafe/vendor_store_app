@@ -11,7 +11,7 @@ class SubcategoryController {
   ) async {
     try {
       http.Response response = await http.get(
-        Uri.parse('$uri/api/category//subcategories'),
+        Uri.parse('$uri/api/category/$categoryName/subcategories'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

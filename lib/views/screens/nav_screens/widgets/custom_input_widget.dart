@@ -7,6 +7,7 @@ class CustomInputWidget extends StatelessWidget {
   final TextInputFormatter? inputFormatter;
   final int? maxLengthInput;
   final int? maxLinesInput;
+  final double? inputWidth;
   const CustomInputWidget({
     super.key,
     required this.focusNode,
@@ -14,6 +15,7 @@ class CustomInputWidget extends StatelessWidget {
     this.inputFormatter,
     this.maxLengthInput,
     this.maxLinesInput,
+    this.inputWidth,
   });
 
   @override
@@ -21,7 +23,7 @@ class CustomInputWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width,
+        width: inputWidth ?? MediaQuery.of(context).size.width,
         child: TextFormField(
           maxLength: maxLengthInput,
           maxLines: maxLinesInput,
