@@ -8,6 +8,7 @@ class CustomInputWidget extends StatelessWidget {
   final int? maxLengthInput;
   final int? maxLinesInput;
   final double? inputWidth;
+  final FormFieldValidator validatorForm;
   const CustomInputWidget({
     super.key,
     required this.focusNode,
@@ -15,7 +16,7 @@ class CustomInputWidget extends StatelessWidget {
     this.inputFormatter,
     this.maxLengthInput,
     this.maxLinesInput,
-    this.inputWidth,
+    this.inputWidth, required this.validatorForm,
   });
 
   @override
@@ -25,6 +26,7 @@ class CustomInputWidget extends StatelessWidget {
       child: SizedBox(
         width: inputWidth ?? MediaQuery.of(context).size.width,
         child: TextFormField(
+          validator: validatorForm,
           maxLength: maxLengthInput,
           maxLines: maxLinesInput,
           inputFormatters: <TextInputFormatter>[
