@@ -11,7 +11,7 @@ class ProductModel {
   final String vendorId;
   final String fullName;
   final String subCategory;
-  final String images;
+  final List<String> images;
 
   ProductModel({
     required this.id,
@@ -54,7 +54,7 @@ class ProductModel {
       vendorId: map['vendorId'] as String,
       fullName: map['fullName'] as String,
       subCategory: map['subCategory'] as String,
-      images: map['images'] as String,
+      images: List<String>.from(map['images'] as List<String>),
     );
   }
 
