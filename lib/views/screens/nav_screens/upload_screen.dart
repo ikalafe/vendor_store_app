@@ -38,6 +38,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
   late int productQuantity;
   late String productDescription;
 
+  bool isLoading = false;
+
   // Initialize an empty lsit to store the selected images
   List<File> images = [];
 
@@ -421,10 +423,14 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: InkWell(
                 onTap: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
                   final fullName = ref.read(vendorProvider)!.fullName;
                   final vendorId = ref.read(vendorProvider)!.id;
                   if (_formKey.currentState!.validate()) {
-                    _productController.uploadProduct(
+                    await _productController
+                        .uploadProduct(
                       productName: productName,
                       productPrice: productPrice,
                       quantity: productQuantity,
@@ -435,7 +441,15 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                       subCategory: selectedSubcategory!.subCategoryName,
                       pickedImages: images,
                       context: context,
-                    );
+                    )
+                        .whenComplete(() {
+                      setState(() {
+                        isLoading = false;
+                      });
+                      selectedCategory = null;
+                      selectedSubcategory = null;
+                      images.clear();
+                    });
                   } else {
                     showSnackBar(
                       context,
@@ -451,15 +465,19 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                     borderRadius: BorderRadius.circular(16),
                     color: const Color(0xff355B8A),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'بارگزاری محصول',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
+                  child: Center(
+                    child: isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            'بارگزاری محصول',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -499,10 +517,10 @@ String formatPrice(String value) {
   final formatter = NumberFormat('#,###');
   // تبدیل عدد فارسی به انگلیسی (اختیاری، در صورت نیاز)
   String englishValue = convertToEnglishNumbers(value);
-  
+
   // تبدیل رشته به عدد
   int number = int.tryParse(englishValue) ?? 0;
-  
+
   // فرمت کردن عدد
   return formatter.format(number);
 }
