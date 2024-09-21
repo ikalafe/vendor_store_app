@@ -9,6 +9,7 @@ class CustomInputWidget extends StatelessWidget {
   final int? maxLinesInput;
   final double? inputWidth;
   final FormFieldValidator validatorForm;
+  final ValueChanged onChange;
   const CustomInputWidget({
     super.key,
     required this.focusNode,
@@ -16,7 +17,9 @@ class CustomInputWidget extends StatelessWidget {
     this.inputFormatter,
     this.maxLengthInput,
     this.maxLinesInput,
-    this.inputWidth, required this.validatorForm,
+    this.inputWidth,
+    required this.validatorForm,
+    required this.onChange,
   });
 
   @override
@@ -26,12 +29,12 @@ class CustomInputWidget extends StatelessWidget {
       child: SizedBox(
         width: inputWidth ?? MediaQuery.of(context).size.width,
         child: TextFormField(
+          onChanged: onChange,
           validator: validatorForm,
           maxLength: maxLengthInput,
           maxLines: maxLinesInput,
           inputFormatters: <TextInputFormatter>[
-            inputFormatter ??
-                FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z0-9@_]+$')),
+            inputFormatter ?? FilteringTextInputFormatter.allow(RegExp(r'.*')),
           ],
           focusNode: focusNode,
           decoration: InputDecoration(

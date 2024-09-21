@@ -2,30 +2,41 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:vendor_store_app/controllers/cateogry_controller.dart';
+import 'package:vendor_store_app/controllers/product_controller.dart';
 import 'package:vendor_store_app/controllers/subcategory_controller.dart';
 import 'package:vendor_store_app/models/category_model.dart';
 import 'package:vendor_store_app/models/subcateogry_model.dart';
+import 'package:vendor_store_app/provider/vendor_provider.dart';
 import 'package:vendor_store_app/services/manage_http_response.dart';
 import 'package:vendor_store_app/views/screens/nav_screens/widgets/custom_input_widget.dart';
 
-class UploadScreen extends StatefulWidget {
+class UploadScreen extends ConsumerStatefulWidget {
   const UploadScreen({super.key});
 
   @override
-  State<UploadScreen> createState() => _UploadScreenState();
+  _UploadScreenState createState() => _UploadScreenState();
 }
 
-class _UploadScreenState extends State<UploadScreen> {
+class _UploadScreenState extends ConsumerState<UploadScreen> {
   late Future<List<CategoryModel>> futureCategory;
   CategoryModel? selectedCategory;
   Future<List<SubcateogryModel>>? futureSubCategories;
   SubcateogryModel? selectedSubcategory;
   // Create an instance of ImagePicker to handle image selection
   final ImagePicker picker = ImagePicker();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final ProductController _productController = ProductController();
+
+  late String productName;
+  late int productPrice;
+  late int productQuantity;
+  late String productDescription;
 
   // Initialize an empty lsit to store the selected images
   List<File> images = [];
@@ -151,6 +162,7 @@ class _UploadScreenState extends State<UploadScreen> {
             Column(
               children: [
                 CustomInputWidget(
+                  onChange: (value) => productName = value,
                   validatorForm: (value) {
                     if (value!.isEmpty) {
                       return "نام محصول خالی است";
@@ -165,6 +177,10 @@ class _UploadScreenState extends State<UploadScreen> {
                   height: 10,
                 ),
                 CustomInputWidget(
+                  onChange: (value) {
+                    String englishValue = convertToEnglishNumbers(value);
+                    productPrice = int.tryParse(englishValue) ?? 0;
+                  },
                   validatorForm: (value) {
                     if (value!.isEmpty) {
                       return "قیمت محصول خالی است";
@@ -174,12 +190,18 @@ class _UploadScreenState extends State<UploadScreen> {
                   },
                   focusNode: focusNodePrice,
                   inputLabel: 'قیمت محصول',
-                  inputFormatter: FilteringTextInputFormatter.digitsOnly,
+                  inputFormatter: FilteringTextInputFormatter.allow(
+                    RegExp(r'[\u06F0-\u06F9\u0660-\u06690-9]+'),
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 CustomInputWidget(
+                  onChange: (value) {
+                    String englishValue = convertToEnglishNumbers(value);
+                    productQuantity = int.tryParse(englishValue) ?? 0;
+                  },
                   validatorForm: (value) {
                     if (value!.isEmpty) {
                       return "تعداد محصول خالی است";
@@ -189,7 +211,8 @@ class _UploadScreenState extends State<UploadScreen> {
                   },
                   focusNode: focusNodeQuantity,
                   inputLabel: 'تعداد',
-                  inputFormatter: FilteringTextInputFormatter.digitsOnly,
+                  inputFormatter: FilteringTextInputFormatter.allow(
+                      RegExp(r'[\u06F0-\u06F9\u0660-\u06690-9]+')),
                 ),
                 const SizedBox(
                   height: 10,
@@ -228,9 +251,10 @@ class _UploadScreenState extends State<UploadScreen> {
                                   ),
                                   child: DropdownButton<CategoryModel>(
                                     value: selectedCategory,
-                                    hint: const SizedBox(
-                                      width: 100,
-                                      child: Text(
+                                    hint: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.23,
+                                      child: const Text(
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         softWrap: false,
@@ -239,6 +263,7 @@ class _UploadScreenState extends State<UploadScreen> {
                                           fontFamily: 'Dana',
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ),
@@ -284,7 +309,7 @@ class _UploadScreenState extends State<UploadScreen> {
                       ),
                       Flexible(
                         child: SizedBox(
-                          width: 150,
+                          width: MediaQuery.of(context).size.width * 0.38,
                           child: FutureBuilder<List<SubcateogryModel>>(
                             future: futureSubCategories,
                             builder: (context, snapshot) {
@@ -374,6 +399,7 @@ class _UploadScreenState extends State<UploadScreen> {
                   height: 10,
                 ),
                 CustomInputWidget(
+                  onChange: (value) => productDescription = value,
                   validatorForm: (value) {
                     if (value!.isEmpty) {
                       return "توضیحات محصول خالی است";
@@ -383,7 +409,6 @@ class _UploadScreenState extends State<UploadScreen> {
                   },
                   focusNode: focusNodeDescription,
                   inputLabel: 'توضیحات محصول',
-                  inputFormatter: FilteringTextInputFormatter.digitsOnly,
                   maxLengthInput: 1000,
                   maxLinesInput: 3,
                 ),
@@ -395,12 +420,21 @@ class _UploadScreenState extends State<UploadScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: InkWell(
-                onTap: () {
+                onTap: () async {
+                  final fullName = ref.read(vendorProvider)!.fullName;
+                  final vendorId = ref.read(vendorProvider)!.id;
                   if (_formKey.currentState!.validate()) {
-                    showSnackBar(
-                      context,
-                      'بارگزاری موفقیت آمیز',
-                      background: Colors.green,
+                    _productController.uploadProduct(
+                      productName: productName,
+                      productPrice: productPrice,
+                      quantity: productQuantity,
+                      description: productDescription,
+                      category: selectedCategory!.name,
+                      vendorId: vendorId,
+                      fullName: fullName,
+                      subCategory: selectedSubcategory!.subCategoryName,
+                      pickedImages: images,
+                      context: context,
                     );
                   } else {
                     showSnackBar(
@@ -438,4 +472,37 @@ class _UploadScreenState extends State<UploadScreen> {
       ),
     );
   }
+}
+
+String convertToEnglishNumbers(String input) {
+  final persianToEnglishDigits = {
+    '۰': '0',
+    '۱': '1',
+    '۲': '2',
+    '۳': '3',
+    '۴': '4',
+    '۵': '5',
+    '۶': '6',
+    '۷': '7',
+    '۸': '8',
+    '۹': '9'
+  };
+
+  input = input.replaceAllMapped(RegExp(r'[۰-۹]'), (match) {
+    return persianToEnglishDigits[match.group(0)]!;
+  });
+
+  return input;
+}
+
+String formatPrice(String value) {
+  final formatter = NumberFormat('#,###');
+  // تبدیل عدد فارسی به انگلیسی (اختیاری، در صورت نیاز)
+  String englishValue = convertToEnglishNumbers(value);
+  
+  // تبدیل رشته به عدد
+  int number = int.tryParse(englishValue) ?? 0;
+  
+  // فرمت کردن عدد
+  return formatter.format(number);
 }
