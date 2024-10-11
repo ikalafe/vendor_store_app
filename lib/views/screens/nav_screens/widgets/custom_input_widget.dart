@@ -10,6 +10,7 @@ class CustomInputWidget extends StatelessWidget {
   final double? inputWidth;
   final FormFieldValidator validatorForm;
   final ValueChanged onChange;
+  final TextInputType? keyboardType;
   const CustomInputWidget({
     super.key,
     required this.focusNode,
@@ -20,6 +21,7 @@ class CustomInputWidget extends StatelessWidget {
     this.inputWidth,
     required this.validatorForm,
     required this.onChange,
+    this.keyboardType,
   });
 
   @override
@@ -29,6 +31,7 @@ class CustomInputWidget extends StatelessWidget {
       child: SizedBox(
         width: inputWidth ?? MediaQuery.of(context).size.width,
         child: TextFormField(
+          keyboardType: keyboardType,
           onChanged: onChange,
           validator: validatorForm,
           maxLength: maxLengthInput,

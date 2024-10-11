@@ -179,6 +179,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                   height: 10,
                 ),
                 CustomInputWidget(
+                  keyboardType:TextInputType.number,
                   onChange: (value) {
                     String englishValue = convertToEnglishNumbers(value);
                     productPrice = int.tryParse(englishValue) ?? 0;
@@ -200,6 +201,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                   height: 10,
                 ),
                 CustomInputWidget(
+                  keyboardType: TextInputType.number,
                   onChange: (value) {
                     String englishValue = convertToEnglishNumbers(value);
                     productQuantity = int.tryParse(englishValue) ?? 0;
@@ -412,7 +414,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                   focusNode: focusNodeDescription,
                   inputLabel: 'توضیحات محصول',
                   maxLengthInput: 1000,
-                  maxLinesInput: 3,
+                  maxLinesInput: 4,
+                  keyboardType: TextInputType.multiline,
                 ),
               ],
             ),
