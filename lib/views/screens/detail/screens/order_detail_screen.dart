@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:vendor_store_app/common/utils.dart';
+import 'package:vendor_store_app/controllers/order_controller.dart';
 import 'package:vendor_store_app/models/vendor_order_model.dart';
 import 'package:vendor_store_app/views/screens/nav_screens/widgets/image.dart';
 
 class OrderDetailScreen extends StatelessWidget {
   final OrderModel order;
-  const OrderDetailScreen({super.key, required this.order});
+  OrderDetailScreen({super.key, required this.order});
+
+  final OrderController orderController = OrderController();
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +173,77 @@ class OrderDetailScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    title: const Center(
+                                      child: Text('از تحویل سفارش مطمئنی؟'),
+                                    ),
+                                    content: SizedBox(
+                                      width: 300,
+                                      height: 50,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 2,
+                                              minimumSize: const Size(120, 40),
+                                              backgroundColor:
+                                                  Colors.lightGreen.shade600,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () async {
+                                              await orderController
+                                                  .updateDeliveryStatus(
+                                                id: order.id,
+                                                context: context,
+                                              );
+                                            },
+                                            child: const Text(
+                                              'بلی',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              minimumSize: const Size(120, 40),
+                                              backgroundColor:
+                                                  Colors.red.shade600,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text(
+                                              'خیر',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.lightGreen.shade600,
                               shape: RoundedRectangleBorder(
@@ -186,7 +259,76 @@ class OrderDetailScreen extends StatelessWidget {
                             ),
                           ),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    title: const Center(
+                                      child: Text('از لخو سفارش مطمئنی؟'),
+                                    ),
+                                    content: SizedBox(
+                                      width: 300,
+                                      height: 50,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 2,
+                                              minimumSize: const Size(120, 40),
+                                              backgroundColor:
+                                                  Colors.lightGreen.shade600,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () async {
+                                              await orderController.cancelOrder(
+                                                id: order.id,
+                                                context: context,
+                                              );
+                                            },
+                                            child: const Text(
+                                              'بلی',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              minimumSize: const Size(120, 40),
+                                              backgroundColor:
+                                                  Colors.red.shade600,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text(
+                                              'خیر',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red.shade400,
                               shape: RoundedRectangleBorder(
