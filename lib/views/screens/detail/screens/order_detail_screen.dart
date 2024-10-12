@@ -266,7 +266,7 @@ class OrderDetailScreen extends StatelessWidget {
                                   return AlertDialog(
                                     backgroundColor: Colors.white,
                                     title: const Center(
-                                      child: Text('از لخو سفارش مطمئنی؟'),
+                                      child: Text('از لغو سفارش مطمئنی؟'),
                                     ),
                                     content: SizedBox(
                                       width: 300,
