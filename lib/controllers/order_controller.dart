@@ -12,7 +12,7 @@ class OrderController {
     try {
       // Send an HTTP GET request to get the orders by the buyerId
       final http.Response response = await http.get(
-        Uri.parse('$uri/api/orders/$vendorId'),
+        Uri.parse('$uri/api/orders/vendors/$vendorId'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
