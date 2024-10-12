@@ -64,4 +64,60 @@ class OrderController {
       debugPrint('***** مشکل در حذف سفارش: $e *****');
     }
   }
+
+  Future<void> updateDeliveryStatus({
+    required String id,
+    required context,
+  }) async {
+    try {
+      http.Response response = await http.patch(
+        Uri.parse('$uri/api/orders/$id/delivered'),
+        body: jsonEncode({
+          "delivered": true,
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+      );
+      manageHttpResponse(
+        response: response,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'محصول به روز رسانی شد',
+              background: Colors.green.shade700);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, 'مشکلی در به روز رسانی محصول رخ داد.');
+      debugPrint('مشکلی در آپدیت محصول رخ داد: $e');
+    }
+  }
+
+  Future<void> cancelOrder({
+    required String id,
+    required context,
+  }) async {
+    try {
+      http.Response response = await http.patch(
+        Uri.parse('$uri/api/orders/$id/processing'),
+        body: jsonEncode({
+          "processing": false,
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+      );
+      manageHttpResponse(
+        response: response,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'لغو سفارش انجام شد.',
+              background: Colors.green.shade700);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, 'مشکلی در لغو سفارش پیش آمد.');
+      debugPrint('مشکلی در لغو سفارش رخ داد.: $e');
+    }
+  }
 }
