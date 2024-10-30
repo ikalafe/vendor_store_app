@@ -18,7 +18,7 @@ class OrderProvider extends StateNotifier<List<OrderModel>> {
         if (order.id == orderId)
           // Create new Order object with the updated status
           OrderModel(
-            id: order.id,
+            id: order.id, 
             fullName: order.fullName,
             email: order.email,
             state: order.state,
