@@ -29,7 +29,7 @@ class _MainVendorScreenState extends State<MainVendorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.10,
+        height: MediaQuery.of(context).size.height * 0.12,
         child: BottomNavigationBar(
           onTap: (value) {
             setState(() {
