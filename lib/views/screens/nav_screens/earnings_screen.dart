@@ -82,25 +82,55 @@ class _EarningsScreenState extends ConsumerState<EarningsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'کل درآمد:',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black54,
-                ),
+              Column(
+                children: [
+                  const Text(
+                    'تعداد سفارشات:',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    convertToNumberPersian(totalEarnings['totalOrders']),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 32,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 8,
+              const SizedBox(
+                height: 20,
               ),
-              Text(
-                convertToPersian(totalEarnings.toInt()),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32,
-                  color: Colors.green,
-                ),
-              ),
+              Column(
+                children: [
+                  const Text(
+                    'کل درآمد:',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    convertToPersian(totalEarnings['totalEarnings'].toInt()),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 32,
+                      color: Colors.green,
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

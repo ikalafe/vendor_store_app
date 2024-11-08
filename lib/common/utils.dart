@@ -11,3 +11,8 @@ String convertToPersian(int number) {
   final formatter = NumberFormat.decimalPattern('fa');
   return '${formatter.format(number)} تومان';
 }
+
+String convertToNumberPersian(int number) {
+  final formatter = NumberFormat.decimalPattern('fa');
+  return formatter.format(number);
+}
